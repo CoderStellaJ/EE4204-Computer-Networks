@@ -24,6 +24,10 @@ gcc -g -Wall -o udp_server_assignment udp_server_assignment.c
 ./udp_server_assignment start receiving
 ./udp_client_assignment 127.0.0.1
 ```
+3. check received file
+```
+diff myfile.txt myUDPreceive.txt
+```
 
 ## Problem
 1. memory leak `corrupted size vs prev_size`

@@ -43,15 +43,15 @@ void str_ser(int sockfd, struct sockaddr *addr, int addrlen)
 	struct ack_so ack;
 	int end = 0, n = 0;
 	long lseek=0;
-	double error = 0.0;
+	double randomnum = 0.0;
 
 	while(!end) {
 		printf("===========\n");
 
 		// error simulation
-        error = (double) rand() / (RAND_MAX);
-        printf("error is %f \n", error);
-        if(error < ERROR_PROB) {
+        randomnum = (double) rand() / (RAND_MAX);
+        printf("random number is %f \n", randomnum);
+        if(randomnum < ERROR_PROB) {
             // damaged packet
             printf("[server] damaged packet\n");
 			// send NACK 
