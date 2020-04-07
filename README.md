@@ -38,3 +38,7 @@ valgrind --track-origins=yes ./udp_server_assignment start receiving
 valgrind --leak-check=full ./udp_client_assignment 127.0.0.1
 ```
 
+## Reference 
+https://stackoverflow.com/questions/45488328/udp-packet-loss-simulation-probability
+
+https://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/socket.html

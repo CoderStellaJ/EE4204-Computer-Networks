@@ -21,7 +21,7 @@
 #define HEADLEN 8
 // experiment variables
 #define DATALEN 500
-#define ERROR_PROB 0
+#define ERROR_PROB 0.1
 
 struct pack_so			//data packet structure
 {

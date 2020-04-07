@@ -132,7 +132,6 @@ float str_cli(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *le
             printf("error when receiving ack\n");
             exit(1);
         }
-		printf("received ack %d %d\n", ack.num, ack.len);
 		if (ack.num == 1 && ack.len == 0) {
 			//ACK
 			ci += slen;
@@ -142,7 +141,6 @@ float str_cli(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *le
 			printf("[client]receive an NACK\n");
 		} else {
 			ci += slen;
-			printf("error in ack transmission\n");
 		}
         
 	}
