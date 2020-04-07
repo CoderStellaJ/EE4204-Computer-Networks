@@ -43,33 +43,54 @@ void str_ser(int sockfd, struct sockaddr *addr, int addrlen)
 	struct ack_so ack;
 	int end = 0, n = 0;
 	long lseek=0;
+	double error = 0.0;
 
 	while(!end) {
-		//receive the packet
-		if ((n= recvfrom(sockfd, &recvs, DATALEN, 0, addr, (socklen_t *)&addrlen))==-1) {
-			printf("error when receiving\n");
-			exit(1);
+		printf("===========\n");
+
+		// error simulation
+        error = (double) rand() / (RAND_MAX);
+        printf("error is %f \n", error);
+        if(error < ERROR_PROB) {
+            // damaged packet
+            printf("[server] damaged packet\n");
+			// send NACK 
+			ack.num = -1;
+			ack.len = 0;
+			if ((n = sendto(sockfd, &ack, 2, 0, addr, addrlen))==-1) {
+				printf("send error!");								
+				exit(1);
+			}
+			printf("[server] sent an NACK\n");
+        }else {
+			// complete packet
+			if ((n= recvfrom(sockfd, &recvs, DATALEN, 0, addr, (socklen_t *)&addrlen))==-1) {
+				printf("error when receiving\n");
+				exit(1);
+			}
+			printf("[server] received a packet\n");
+			
+			//end of the file
+			if (recvs[n-1] == '\0')	{
+				end = 1;
+				n --;
+			}
+
+			// process the received packet
+			memcpy((buf+lseek), recvs, n);
+			printf("%d bytes of data received: %s\n", n, recvs);
+			lseek += n;
+
+			// send ack 
+			ack.num = 1;
+			ack.len = 0;
+			if ((n = sendto(sockfd, &ack, 2, 0, addr, addrlen))==-1) {
+				printf("send error!");								
+				exit(1);
+			}
+			printf("[server] sent an ack\n");
 		}
-		printf("[server] received a packet\n");
-		
-		//end of the file
-		if (recvs[n-1] == '\0')	{
-			end = 1;
-			n --;
-		}
-		memcpy((buf+lseek), recvs, n);
-        printf("%d bytes of data received: %s\n", n, recvs);
-		lseek += n;
-    
-    	// send ack 
-		ack.num = 1;
-		ack.len = 0;
-		//send the ack
-		if ((n = sendto(sockfd, &ack, 2, 0, addr, addrlen))==-1) {
-			printf("send error!");								
-			exit(1);
-		}
-		printf("[server] sent an ack\n");
+
 		printf("the end: %d\n", end);
 	}
   
